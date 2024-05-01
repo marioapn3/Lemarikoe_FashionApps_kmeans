@@ -11,6 +11,6 @@ class DigitalWardrobe extends Model
     protected $table = 'digital_wardrobes';
 
     protected $fillable = [
-        'user_id', 'cloudFilePath', 'category', 'wardrobeTag'
+        'user_id', 'cloudFilePath', 'category', 'wardrobeTag', 'style_preference', 'color', 'occasion', 'fashionStyle', 'wardrobeTag'
     ];
 }

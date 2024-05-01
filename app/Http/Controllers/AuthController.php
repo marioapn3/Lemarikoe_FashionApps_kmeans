@@ -7,13 +7,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Phpml\Clustering\KMeans;
 
 class AuthController extends Controller
 {
+    private $clusterController;
     public function __construct()
     {
-        // $this->middleware('guest')->except('logout');
 
+        $this->clusterController = new ClusteringController();
     }
     public function loginView()
     {
@@ -43,7 +45,7 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    public function register(Request $request): RedirectResponse
+    public function register(Request $request)
     {
         $credentials = $request->validate([
             'name' => ['required'],
@@ -52,10 +54,10 @@ class AuthController extends Controller
         ]);
 
         User::create($credentials);
-        // Auth::login($user);
+        // setelh sukses login langsung
+        Auth::attempt($credentials);
 
-        // return redirect()->route('login');
-        return redirect()->back()->with('success', true);
+        return redirect()->route('dashboard.questionare');
     }
 
     public function logout()
@@ -96,6 +98,84 @@ class AuthController extends Controller
             return redirect()->back()->with('success', 'Password updated successfully');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function questionare()
+    {
+        $user = User::find(Auth::id());
+        if ($user->style_preference != null) {
+            return redirect()->route('dashboard.index');
+        }
+        return view('auth.questionare');
+    }
+
+    public function questionareUpdate(Request $request)
+    {
+        // ambil fungsi dari ClusteringController
+
+        $user = User::find(Auth::id());
+        $request->validate([
+            'fashion_style' => ['required'],
+            'style' => ['required'],
+            'color' => ['required'],
+        ]);
+
+        $array = [
+            $this->getFashionStyle($request->fashion_style),
+            $this->getOccasions($request->style),
+            $this->getColors($request->color),
+        ];
+
+        // $cluster = $this->ClusteringData($array);
+        $cluster = $this->clusterController->ClusteringData($array);
+        $user->update([
+            'style_preference' => $cluster
+        ]);
+        return redirect()->route('dashboard.index');
+        // $user->stylePreference = $cluster;
+        // $user->save();
+    }
+
+    public function getFashionStyle($style)
+    {
+        if ($style == 'Vintage') {
+            return 1;
+        } elseif ($style == 'Casual') {
+            return 2;
+        } elseif ($style == 'Streetwear') {
+            return 3;
+        } elseif ($style == 'Minimalistic') {
+            return 4;
+        } elseif ($style == 'Indie') {
+            return 5;
+        }
+    }
+    public function getOccasions($style)
+    {
+        if ($style == 'Casual') {
+            return 1;
+        } elseif ($style == 'Formal') {
+            return 2;
+        } elseif ($style == 'Work') {
+            return 3;
+        } elseif ($style == 'School') {
+            return 4;
+        }
+    }
+
+    public function getColors($style)
+    {
+        if ($style == 'Dark') {
+            return 1;
+        } elseif ($style == 'Colourful') {
+            return 2;
+        } elseif ($style == 'Pastels') {
+            return 3;
+        } elseif ($style == 'Bright') {
+            return 4;
+        } elseif ($style == 'Monochrome') {
+            return 5;
         }
     }
 }

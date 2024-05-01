@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClusteringController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DigitalWardrobeController;
 use App\Http\Controllers\MixMatchController;
@@ -38,6 +39,8 @@ Route::controller(AuthController::class)->group(function () {
 // });
 
 Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(function () {
+    Route::get('/questionare', [AuthController::class, 'questionare'])->name('questionare');
+    Route::put('/questionareUpdate', [AuthController::class, 'questionareUpdate'])->name('questionareUpdate');
     Route::get('/manage-account', [AuthController::class, 'manage_account'])->name('manage_account');
     Route::post('/auth/update-profile', [AuthController::class, 'updateProfile'])->name('update-profile');
     Route::post('/auth/update-password', [AuthController::class, 'updatePassword'])->name('update-password');
@@ -50,9 +53,15 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
         Route::post('/delete-data', [DigitalWardrobeController::class, 'deleteData'])->name('digital-wardrobe.delete-data');
     });
     Route::get('/outfit-history', [OutfitHistoryController::class, 'index'])->name('outfit-history');
+    Route::get('/outfit-history/get-data/{id}', [OutfitHistoryController::class, 'getData'])->name('outfit-history.get-data');
+    Route::post('/outfit-history/delete-data', [OutfitHistoryController::class, 'deleteData'])->name('outfit-history.delete-data');
     Route::prefix('mix-match')->group(function () {
         Route::get('/', [MixMatchController::class, 'index'])->name('mix-match');
         Route::get('/auto-mix-match', [MixMatchController::class, 'index_auto'])->name('auto-mix-match');
         Route::post('/store', [MixMatchController::class, 'store'])->name('mix-match.store');
+        Route::post('/generate-auto-mix-match', [MixMatchController::class, 'generateAutoMixMatch'])->name('mix-match.generate-auto-mix-match');
     });
 });
+
+
+// Route::get("/generate", [ClusteringController::class, 'ClusteringData']);

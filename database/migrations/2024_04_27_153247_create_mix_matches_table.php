@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             // $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('digital_wardrobes_id')->constrained('digital_wardrobes');
-            $table->foreignId('outfit_history_id')->constrained('outfit_histories');
+            $table->foreignId('outfit_history_id')->constrained('outfit_histories')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

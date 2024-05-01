@@ -8,11 +8,17 @@ use Illuminate\Support\Facades\Redirect;
 
 class DigitalWardrobeController extends Controller
 {
+    private $clusterController;
+    public function __construct()
+    {
+
+        $this->clusterController = new ClusteringController();
+    }
     public function index()
     {
         $tops = DigitalWardrobe::where('category', 'Tops')->get();
         $bottoms = DigitalWardrobe::where('category', 'Bottoms')->get();
-        $overalls = DigitalWardrobe::where('category', 'Overalls')->get();
+        $overalls = DigitalWardrobe::all();
         return view('dashboard.dashboard-wardrobe', compact('tops', 'bottoms', 'overalls'));
     }
     const STORAGE_PATHS = [
@@ -24,9 +30,17 @@ class DigitalWardrobeController extends Controller
     {
         $request->validate([
             'category' => 'required',
-            'wardrobeTag' => 'required',
-            'cloudFilePath' => 'required'
+            'cloudFilePath' => 'required', 'wardrobeTag' => 'required'
         ]);
+
+        $array = [
+            $this->getFashionStyle($request->fashion_style),
+            $this->getOccasions($request->style),
+            $this->getColors($request->color),
+        ];
+        // $cluster = $this->ClusteringData($array);
+        $cluster = $this->clusterController->ClusteringData($array);
+
         $category = $request->category;
         $file = $request->file('cloudFilePath');
         $originalFilename = $file->getClientOriginalName();
@@ -39,12 +53,16 @@ class DigitalWardrobeController extends Controller
         } else {
             return redirect()->back()->with('error', 'Invalid category');
         }
-
+        //  'color', 'occasion', 'fashionStyle'
         DigitalWardrobe::create([
             'user_id' => auth()->id(),
             'category' => $request->category,
-            'wardrobeTag' => $request->wardrobeTag,
             'cloudFilePath' => $data,
+            'style_preference' => $cluster,
+            'wardrobeTag' => $request->wardrobeTag,
+            'color' => $request->color,
+            'occasion' => $request->style,
+            'fashionStyle' => $request->fashion_style
         ]);
 
         return Redirect::back()->with('success', 'Image uploaded successfully');
@@ -73,6 +91,48 @@ class DigitalWardrobeController extends Controller
             return Redirect::back()->with('success', 'Data deleted successfully');
         } catch (\Exception $e) {
             return Redirect::back()->with('error', 'Data failed to delete');
+        }
+    }
+
+    public function getFashionStyle($style)
+    {
+        if ($style == 'Vintage') {
+            return 1;
+        } elseif ($style == 'Casual') {
+            return 2;
+        } elseif ($style == 'Streetwear') {
+            return 3;
+        } elseif ($style == 'Minimalistic') {
+            return 4;
+        } elseif ($style == 'Indie') {
+            return 5;
+        }
+    }
+    public function getOccasions($style)
+    {
+        if ($style == 'Casual') {
+            return 1;
+        } elseif ($style == 'Formal') {
+            return 2;
+        } elseif ($style == 'Work') {
+            return 3;
+        } elseif ($style == 'School') {
+            return 4;
+        }
+    }
+
+    public function getColors($style)
+    {
+        if ($style == 'Dark') {
+            return 1;
+        } elseif ($style == 'Colourful') {
+            return 2;
+        } elseif ($style == 'Pastels') {
+            return 3;
+        } elseif ($style == 'Bright') {
+            return 4;
+        } elseif ($style == 'Monochrome') {
+            return 5;
         }
     }
 }

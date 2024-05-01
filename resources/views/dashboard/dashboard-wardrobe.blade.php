@@ -101,7 +101,7 @@
                     <div class="swiper-wrapper">
 
                         @foreach ($overalls as $overall)
-                            <a href="#" data-id="{{ $overall->id }}" href="javascript:void(0)" id="btn-edit-post"
+                            <a data-id="{{ $overall->id }}" href="javascript:void(0)" id="btn-edit-post"
                                 class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
                                 <div class="card-body">
                                     <img src="{{ asset($overall->cloudFilePath) }}" class="d-block mx-auto"
@@ -148,12 +148,45 @@
                                     class="form-control">
                             </div>
                             <div class="col-lg-7">
+                                {{-- buatkan label --}}
+                                <label for="category-add"
+                                    class="form-label
+                                mb-2">Category</label>
                                 <select name="category" id="category-add" class="form-select mb-3">
                                     <option value="">Category</option>
                                     <option value="Tops">Tops</option>
                                     <option value="Bottoms">Bottoms</option>
                                     <option value="Overalls">Overalls</option>
                                 </select>
+                                <label for="fashion_style"
+                                    class="form-label
+                                mb-2">Fashion Style</label>
+                                <select name="fashion_style" class="form-select mb-3">
+                                    <option value="Vintage">Vintage</option>
+                                    <option value="Classic">Classic</option>
+                                    <option value="Streetwear">Streetwear</option>
+                                    <option value="Minimalistic">Minimalistic</option>
+                                    <option value="Indie">Indie</option>
+                                </select> <label for="style"
+                                    class="form-label
+                                mb-2">Ocassion</label>
+                                <select name="style" class="form-select mb-3">
+                                    <option value="Casual">Casual</option>
+                                    <option value="Formal">Formal</option>
+                                    <option value="Work">Work</option>
+                                    <option value="School">School</option>
+                                </select>
+                                <label for="color"
+                                    class="form-label
+                                mb-2">Color</label>
+                                <select name="color" class="form-select mb-3">
+                                    <option value="Dark">Dark</option>
+                                    <option value="Colourful">Colourful</option>
+                                    <option value="Pastels">Pastels</option>
+                                    <option value="Bright">Bright</option>
+                                    <option value="Monochrome">Monochrome</option>
+                                </select>
+
                                 <textarea name="wardrobeTag" id="wardrobeTag" cols="30" rows="4" class="form-control mb-4"
                                     placeholder="Tags"></textarea>
                                 <button class="btn btn-primary" type="submit">Save</button>

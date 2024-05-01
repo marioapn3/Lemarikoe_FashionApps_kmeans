@@ -23,8 +23,39 @@ class MixMatchController extends Controller
 
     public function index_auto()
     {
-        $histories = OutfitHistory::where('user_id', Auth::user()->id)->get();
-        return view('dashboard.dashboard-auto-mix-match', compact('histories'));
+        // $histories = OutfitHistory::where('user_id', Auth::user()->id)->get();
+        return view('dashboard.dashboard-auto-mix-match');
+    }
+    public function generateAutoMixMatch(Request $request)
+    {
+        $request->validate([
+            'occasion' => 'required',
+        ]);
+
+        $top = DigitalWardrobe::where('category', 'Tops')->where('occasion', $request->ocassion)->where('style_preference', Auth::user()->style_preference)->take(3)->get();
+        $bottom = DigitalWardrobe::where('category', 'Bottoms')->where('occasion', $request->ocassion)->where('style_preference', Auth::user()->style_preference)->take(3)->get();
+        if ($top->isEmpty()) {
+            $top = DigitalWardrobe::where('category', 'Tops')->where('occasion', $request->ocassion)->take(3)->get();
+            if ($top->isEmpty()) {
+                $top = DigitalWardrobe::where('category', 'Tops')->take(3)->get();
+            }
+        }
+
+        if ($bottom->isEmpty()) {
+            $bottom = DigitalWardrobe::where('category', 'Bottoms')->where('occasion', $request->ocassion)->take(3)->get();
+            if ($bottom->isEmpty()) {
+                $bottom = DigitalWardrobe::where('category', 'Bottoms')->take(3)->get();
+            }
+        }
+        $top = DigitalWardrobe::where('category', 'Tops')->take(3)->get();
+        $bottom = DigitalWardrobe::where('category', 'Bottoms')->take(3)->get();
+
+        // $combinedData = array_merge($top->toArray(), $bottom->toArray());
+        // return response()->json([
+        //     'data' => $combinedData
+        // ]);
+        return view('dashboard.dashboard-auto-mix-match', compact('top', 'bottom'));
+        // return view('dashboard.dashboard-auto-mix-match', compact('top', 'bottom'));
     }
     public function store(Request $request)
     {

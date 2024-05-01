@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('cloudFilePath');
             $table->string('category');
             $table->string('wardrobeTag');
+            $table->integer('style_preference')->nullable();
+            $table->string('color');
+            $table->string('occasion');
+            $table->string('fashionStyle');
             $table->timestamps();
         });
     }

@@ -41,9 +41,9 @@
                 </div>
                 {{-- @dd($histories) --}}
                 <div class="row row-cols-2 row-cols-lg-5 g-4">
-                    <div class="col">
-                        @foreach ($histories as $history)
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#detailModal"
+                    @foreach ($histories as $history)
+                        <div class="col">
+                            <a data-id="{{ $history->id }}" href="javascript:void(0)" id="btn-edit-post"
                                 class="card card-outfit rounded-4">
                                 {{-- <div class="card-body"> --}}
 
@@ -60,39 +60,15 @@
 
                                 {{-- </div> --}}
                             </a>
-                        @endforeach
 
-                    </div>
+                        </div>
+                    @endforeach
+
                 </div>
             </section>
         </div>
     </div>
-
-    <div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body py-5">
-                    <div class="row align-items-center">
-                        <div class="col-lg-5">
-                            <img src="assets/images/outfit/outfit-1.png" alt="" class="rounded d-block mx-auto">
-                        </div>
-                        <div class="col-lg-7">
-                            <p>24/04/2024</p>
-                            <span class="border border-secondary-subtle rounded p-2">#Formal</span>
-                            <span class="border border-secondary-subtle rounded p-2">#Work</span>
-                            <span class="border border-secondary-subtle rounded p-2">#Blouse</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="delete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    {{-- <div class="modal fade" id="delete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="deleteLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -106,9 +82,100 @@
                 </div>
             </div>
         </div>
+    </div> --}}
+    <div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5">
+                            <img id="tops" src="" alt="" class="rounded d-block mx-auto">
+                            <img id="bots" src="" alt="" class="rounded d-block mx-auto">
+                        </div>
+                        <div class="col-lg-7">
+                            <p id="date"></p>
+                            <span id="tags" class="border border-secondary-subtle rounded p-2">#Formal</span>
+                            <form action="{{ route('dashboard.outfit-history.delete-data') }}" class="mt-4"
+                                method="post">
+                                @csrf
+                                @method('POST')
+                                <!-- delete button -->
+                                <input name="id" id="id" type="text" hidden>
+                                <button class="btn btn-danger" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
     <script src="{{ asset('assets/vendors/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $('body').on('click', '#btn-edit-post', function() {
+            let id_data = $(this).data('id');
+            //fetch detail post with ajax
+            let baseUrl = window.location.origin;
+            console.log(id_data);
+            $.ajax({
+                url: `/dashboard/outfit-history/get-data/${id_data}`,
+                type: "GET",
+                cache: false,
+                success: function(response) {
+                    // console.log(response.data.);
+                    var top = baseUrl + '/' + response.data[0].mix_match[0].digital_wardrobe
+                        .cloudFilePath;
+                    var bot = baseUrl + '/' + response.data[0].mix_match[1].digital_wardrobe
+                        .cloudFilePath;
+                    var tags = response.data[0].outfit_tags;
+                    var date = response.data[0].created_at;
+                    var id = response.data[0].id;
+                    //ubah daate nya menjdi dd/mm/yyyy
+                    var date = new Date(date);
+                    var dd = date.getDate();
+                    var mm = date.getMonth() + 1;
+                    var yyyy = date.getFullYear();
+                    if (dd < 10) {
+                        dd = '0' + dd;
+                    }
+                    if (mm < 10) {
+                        mm = '0' + mm;
+                    }
+                    date = dd + '/' + mm + '/' + yyyy;
+
+                    console.log(top);
+                    console.log(bot);
+                    console.log(tags);
+                    console.log(date);
+                    console.log(id);
+                    $('#tops').attr('src', top);
+                    $('#bots').attr('src', bot);
+                    $('#tags').html(tags);
+                    $('#date').html(date);
+                    $('#id').val(id);
+                    $('#editModal').modal('show');
+                    // if ($category == 'Tops') {
+                    //     $('#category').html(`
+                //         <option value="">Category</option>
+                //         <option value="Tops" selected>Tops</option>
+                //         <option value="Bottoms">Bottoms</option>
+                //     `);
+                    // } else {
+                    //     $('#category').html(`
+                //         <option value="">Category</option>
+                //         <option value="Tops">Tops</option>
+                //         <option value="Bottoms" selected>Bottoms</option>
+                //     `);
+                    // }
+
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

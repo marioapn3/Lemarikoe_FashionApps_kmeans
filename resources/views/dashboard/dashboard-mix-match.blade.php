@@ -23,8 +23,8 @@
                 <div class="d-flex align-items-center justify-content-between mb-5">
                     <h1 class="title text-brown fw-bold mb-0">Mix & Match Outfit</h1>
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <a href="dashboard-mix-match.html" class="btn btn-brown px-4">Manual</a>
-                        <a href="dashboard-auto-mix-match.html" type="button" class="btn btn-soft-brown px-4">Auto</a>
+                        <a href="{{ route('dashboard.mix-match') }}" class="btn btn-brown px-4">Manual</a>
+                        <a href="{{ route('dashboard.auto-mix-match') }}" type="button" class="btn btn-soft-brown px-4">Auto</a>
                     </div>
                 </div>
 
