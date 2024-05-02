@@ -32,19 +32,19 @@ class MixMatchController extends Controller
             'occasion' => 'required',
         ]);
 
-        $top = DigitalWardrobe::where('category', 'Tops')->where('occasion', $request->ocassion)->where('style_preference', Auth::user()->style_preference)->take(3)->get();
-        $bottom = DigitalWardrobe::where('category', 'Bottoms')->where('occasion', $request->ocassion)->where('style_preference', Auth::user()->style_preference)->take(3)->get();
+        $top = DigitalWardrobe::where('category', 'Tops')->inRandomOrder()->where('occasion', $request->ocassion)->where('style_preference', Auth::user()->style_preference)->take(3)->get();
+        $bottom = DigitalWardrobe::where('category', 'Bottoms')->inRandomOrder()->where('occasion', $request->ocassion)->where('style_preference', Auth::user()->style_preference)->take(3)->get();
         if ($top->isEmpty()) {
-            $top = DigitalWardrobe::where('category', 'Tops')->where('occasion', $request->ocassion)->take(3)->get();
+            $top = DigitalWardrobe::where('category', 'Tops')->inRandomOrder()->where('occasion', $request->ocassion)->take(3)->get();
             if ($top->isEmpty()) {
-                $top = DigitalWardrobe::where('category', 'Tops')->take(3)->get();
+                $top = DigitalWardrobe::where('category', 'Tops')->inRandomOrder()->take(3)->get();
             }
         }
 
         if ($bottom->isEmpty()) {
-            $bottom = DigitalWardrobe::where('category', 'Bottoms')->where('occasion', $request->ocassion)->take(3)->get();
+            $bottom = DigitalWardrobe::where('category', 'Bottoms')->inRandomOrder()->where('occasion', $request->ocassion)->take(3)->get();
             if ($bottom->isEmpty()) {
-                $bottom = DigitalWardrobe::where('category', 'Bottoms')->take(3)->get();
+                $bottom = DigitalWardrobe::where('category', 'Bottoms')->inRandomOrder()->take(3)->get();
             }
         }
         $top = DigitalWardrobe::where('category', 'Tops')->take(3)->get();

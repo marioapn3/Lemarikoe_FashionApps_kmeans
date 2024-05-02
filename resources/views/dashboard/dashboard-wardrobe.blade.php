@@ -7,8 +7,9 @@
     <title>LemariKoe</title>
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/boxicons/css/boxicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+
 </head>
 
 <body class="overflow-x-hidden">
@@ -37,6 +38,7 @@
             </div>
 
             <!-- TOP -->
+
             <section class="mb-5 position-relative px-3 px-lg-5">
                 <h2 class="title2 text-brown fw-bold mb-4">Tops</h2>
                 <!-- EMPTY -->
@@ -46,14 +48,43 @@
                 <div class="swiper topSwiper">
                     <div class="swiper-wrapper">
                         @foreach ($tops as $top)
-                            <a data-id="{{ $top->id }}" href="javascript:void(0)" id="btn-edit-post"
+                            <a href="#" data-id="{{ $top->id }}" href="javascript:void(0)" id="btn-edit-post"
                                 class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
                                 <div class="card-body">
                                     <img src="{{ asset($top->cloudFilePath) }}" class="d-block mx-auto" alt="Outfit 1">
                                 </div>
                             </a>
                         @endforeach
-
+                        {{-- <a href="#"
+                            class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
+                            <div class="card-body">
+                                <img src="assets/images/outfit/tops-1.png" class="d-block mx-auto" alt="Outfit 1">
+                            </div>
+                        </a>
+                        <a href="#"
+                            class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
+                            <div class="card-body">
+                                <img src="assets/images/outfit/tops-2.png" class="d-block mx-auto" alt="Outfit 1">
+                            </div>
+                        </a>
+                        <a href="#"
+                            class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
+                            <div class="card-body">
+                                <img src="assets/images/outfit/tops-3.png" class="d-block mx-auto" alt="Outfit 1">
+                            </div>
+                        </a>
+                        <a href="#"
+                            class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
+                            <div class="card-body">
+                                <img src="assets/images/outfit/tops-4.png" class="d-block mx-auto" alt="Outfit 1">
+                            </div>
+                        </a>
+                        <a href="#"
+                            class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
+                            <div class="card-body">
+                                <img src="assets/images/outfit/tops-5.png" class="d-block mx-auto" alt="Outfit 1">
+                            </div>
+                        </a> --}}
                     </div>
                 </div>
 
@@ -66,7 +97,6 @@
                     <i class="bx bx-chevron-right fs-2"></i>
                 </div>
             </section>
-
             <!-- BOTTOM -->
             <section class="mb-5 position-relative px-3 px-lg-5">
                 <h2 class="title2 text-brown fw-bold mb-4">Bottoms</h2>
