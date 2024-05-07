@@ -6,8 +6,12 @@
         <div class="dropdown">
             <a class="text-white d-flex align-items-center gap-2 fw-semibold" type="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                {{ Auth::user()->name }} <img src="{{ asset('assets/images/girl-icon.png') }}" alt="Username"
-                    width="40">
+                {{ Auth::user()->name }}
+                @if (Auth::user()->gender == 'boy')
+                    <img src="{{ asset('assets/images/boy-icon.png') }}" alt="Username" width="40">
+                @else
+                    <img src="{{ asset('assets/images/girl-icon.png') }}" alt="Username" width="40">
+                @endif
             </a>
             <ul class="dropdown-menu dropdown-menu-end bg-white border mt-2">
                 <li>

@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    <x-toast-component />
     <nav class="navbar navbar-expand-lg bg-brown py-3" data-bs-theme="dark">
         <div class="container-fluid">
             <a href="." class="navbar-brand fw-bold">Lemarikoe</a>
@@ -40,15 +41,15 @@
                                         <div class="d-flex align-items-center gap-2">
                                             <div>
                                                 <label for="icon-boy" class="cursor-pointer">
-                                                    <input type="radio" name="icon" id="icon-boy"
-                                                        class="d-none questionnare-icon">
+                                                    <input name="gender" value="boy" type="radio" name="icon"
+                                                        id="icon-boy" class="d-none questionnare-icon">
                                                     <img src="{{ asset('assets/images/boy-icon.png') }}" alt="Boy">
                                                 </label>
                                             </div>
                                             <div>
                                                 <label for="icon-girl" class="cursor-pointer">
-                                                    <input type="radio" name="icon" id="icon-girl"
-                                                        class="d-none questionnare-icon">
+                                                    <input name="gender" value="girl" type="radio" name="icon"
+                                                        id="icon-girl" class="d-none questionnare-icon">
                                                     <img src="{{ asset('assets/images/girl-icon.png') }}"
                                                         alt="Girl">
                                                 </label>

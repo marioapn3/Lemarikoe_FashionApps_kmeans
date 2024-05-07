@@ -10,11 +10,50 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/boxicons/css/boxicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <style>
+        .top-height {
+            height: 60px;
+        }
+
+        .bot-height {
+            height: 140px;
+        }
+
+        @media (min-width: 576px) {
+            .top-height {
+                height: 70px;
+            }
+
+            .bot-height {
+                height: 145px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .top-height {
+                height: 70px;
+            }
+
+            .bot-height {
+                height: 150px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .top-height {
+                height: 85px;
+            }
+
+            .bot-height {
+                height: 160px;
+            }
+        }
+    </style>
 </head>
 
 <body class="overflow-x-hidden">
     <x-navbar-dashboard />
-
+    <x-toast-component />
     <div class="row">
         <x-sidebar-dashboard />
         <div class="col-lg-11 p-4 p-lg-5">
@@ -24,19 +63,38 @@
                         <h1 class="title text-brown fw-bolder mb-0">Outfit History</h1>
                     </div>
                     <div class="col-lg-7">
-                        <div class="d-flex align-items-center justify-content-end gap-2">
-                            <button class="btn btn-light" type="button">Delete</button>
-                            <div class="d-flex gap-2">
-                                <div class="input-group">
-                                    <span class="input-group-text border-dark bg-transparent" id="filter"><i
-                                            class="bx bx-filter"></i></span>
-                                    <input type="text" class="form-control border-start-0 border-dark rounded-end-2"
-                                        placeholder="Filter">
+                        <form action="{{ route('dashboard.outfit-history.filter') }}" method="GET">
+                            <div class="d-flex align-items-center justify-content-end gap-2">
+                                <div class="d-flex gap-2">
+                                    <div class="input-group">
+
+                                        <select name="occasion" id="occasion" class="form-select rounded">
+
+                                            <option value="" {{ !request()->has('occasion') ? 'selected' : '' }}>
+                                                Filter
+                                                Occasion</option>
+                                            <option value="Casual"
+                                                {{ request('occasion') == 'Casual' ? 'selected' : '' }}>
+                                                Casual</option>
+                                            <option value="Formal"
+                                                {{ request('occasion') == 'Formal' ? 'selected' : '' }}>
+                                                Formal</option>
+                                            <option value="Work"
+                                                {{ request('occasion') == 'Work' ? 'selected' : '' }}>
+                                                Work
+                                            </option>
+                                            <option value="School"
+                                                {{ request('occasion') == 'School' ? 'selected' : '' }}>
+                                                School</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-brown rounded-1" type="submit"><i
+                                            class='bx bx-slider'></i></button>
                                 </div>
-                                <button class="btn btn-brown rounded-1" type="submit"><i
-                                        class='bx bx-slider'></i></button>
                             </div>
-                        </div>
+
+                        </form>
+
                     </div>
                 </div>
                 {{-- @dd($histories) --}}
@@ -48,14 +106,19 @@
                                 {{-- <div class="card-body"> --}}
 
                                 <div class="row  p-3">
-                                    @foreach ($history->mixMatch as $item)
-                                        {{-- @dd($item->digitalWardrobe) --}}
-                                        <img src="{{ asset($item->digitalWardrobe->cloudFilePath) }}" class="top-image"
-                                            style="height: 120px;object-fit: contain;" alt="Outfit 1 Top">
-                                        {{-- <img src="{{ asset('assets/images/outfit/bottoms-1.png') }}"
-                                            class="bottom-image" style="height: 130px;object-fit: contain;"
-                                            alt="Outfit 1 Bottom"> --}}
+                                    @foreach ($history->mixMatch as $index => $item)
+                                        {{-- Cek indeks untuk menentukan tinggi gambar --}}
+                                        @if ($index == 0)
+                                            <img src="{{ asset($item->digitalWardrobe->cloudFilePath) }}"
+                                                class="top-image top-height" style=" object-fit: contain;"
+                                                alt="Outfit 1 Top">
+                                        @else
+                                            <img src="{{ asset($item->digitalWardrobe->cloudFilePath) }}"
+                                                class="top-image bot-height" style=" object-fit: contain;"
+                                                alt="Outfit 1 Top">
+                                        @endif
                                     @endforeach
+
                                 </div>
 
                                 {{-- </div> --}}
@@ -107,6 +170,13 @@
                                 <input name="id" id="id" type="text" hidden>
                                 <button class="btn btn-danger" type="submit">Delete</button>
                             </form>
+                            <form action="{{ route('dashboard.outfit-history.edit-data') }}" class="mt-4"
+                                method="get">
+                                <!-- delete button -->
+                                <input name="id" id="id_edit" type="text" hidden>
+                                <button class="btn btn-danger" type="submit">Edit</button>
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -131,7 +201,7 @@
                         .cloudFilePath;
                     var bot = baseUrl + '/' + response.data[0].mix_match[1].digital_wardrobe
                         .cloudFilePath;
-                    var tags = response.data[0].outfit_tags;
+                    var tags = response.data[0].occasion;
                     var date = response.data[0].created_at;
                     var id = response.data[0].id;
                     //ubah daate nya menjdi dd/mm/yyyy
@@ -154,9 +224,11 @@
                     console.log(id);
                     $('#tops').attr('src', top);
                     $('#bots').attr('src', bot);
-                    $('#tags').html(tags);
+                    $('#tags').html('#' + tags);
                     $('#date').html(date);
                     $('#id').val(id);
+                    $('#id_edit').val(id);
+
                     $('#editModal').modal('show');
                     // if ($category == 'Tops') {
                     //     $('#category').html(`

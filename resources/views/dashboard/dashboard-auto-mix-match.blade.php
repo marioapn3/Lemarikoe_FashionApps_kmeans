@@ -14,7 +14,7 @@
 
 <body class="overflow-x-hidden">
     <x-navbar-dashboard />
-
+    <x-toast-component />
     <div class="row">
         <x-sidebar-dashboard />
         <div class="col-lg-11 p-4 p-lg-5">
@@ -98,10 +98,13 @@
                     </div>
                     <div class="col-lg-3">
                         <section class="mt-5">
+                            @php
+                                $occasion = $occasion ?? '';
+                            @endphp
                             <div class="mb-3">
-                                <label for="tags">Outfit Tags</label>
-                                <textarea name="tags" id="tags" cols="30" rows="2" class="form-control rounded"
-                                    placeholder="Add tags"></textarea>
+                                <label for="tags">Occasion</label>
+                                <input type="text" value="{{ $occasion }}" class="form-control rounded"
+                                    id="occasion_style" readonly>
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button class="btn btn-primary px-4" type="button" onclick="saveData()">
@@ -162,7 +165,7 @@
                     }
                 }
             });
-            var tags = document.querySelector('#tags').value;
+            var tags = document.querySelector('#occasion_style').value;
             console.log(topCarouselSrc);
             console.log(bottomCarouselSrc);
             console.log(tags);
@@ -175,7 +178,7 @@
                 data: {
                     topImageUrl: topCarouselSrc,
                     bottomImageUrl: bottomCarouselSrc,
-                    tags: tags
+                    occasion: tags
                 },
                 success: function(response) {
                     $(document).ready(function() {

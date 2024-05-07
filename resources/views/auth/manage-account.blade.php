@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <x-toast-component />
     <x-navbar-dashboard />
     <section class="py-5 bg-light">
         <div class="container">
@@ -47,6 +48,31 @@
                             <input value="{{ Auth::user()->email }}" type="email" name="email" id="email"
                                 class="form-control" placeholder="Insert email address">
                         </div>
+                        {{-- edit gender radio button --}}
+                        <div class="mb-3 ">
+                            <label for="gender" class="mb-1">Jenis Kelamin</label>
+                            <div class="d-flex gap-2">
+                                <div>
+                                    <label for="icon-boy" class="cursor-pointer">
+                                        <input name="gender" value="boy" type="radio" id="icon-boy"
+                                            class="d-none questionnare-icon"
+                                            {{ Auth::user()->gender == 'boy' ? 'checked' : '' }}>
+                                        <img src="{{ asset('assets/images/boy-icon.png') }}" alt="Boy">
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="icon-girl" class="cursor-pointer">
+                                        <input name="gender" value="girl" type="radio" id="icon-girl"
+                                            class="d-none questionnare-icon"
+                                            {{ Auth::user()->gender == 'girl' ? 'checked' : '' }}>
+                                        <img src="{{ asset('assets/images/girl-icon.png') }}" alt="Girl">
+                                    </label>
+                                </div>
+
+                            </div>
+
+                        </div>
+
                         <button class="btn btn-info text-white px-4" type="submit">Save</button>
                     </form>
                 </div>

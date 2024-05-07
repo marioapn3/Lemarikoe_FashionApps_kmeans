@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <x-navbar-dashboard />
+    <x-navbar-dashboard /> <x-toast-component />
     <section class="py-5 section-dashboard">
         <div class="container">
             <div class="row align-items-center g-3 mb-4">

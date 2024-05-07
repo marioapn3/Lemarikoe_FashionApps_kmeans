@@ -31,18 +31,19 @@ class MixMatchController extends Controller
         $request->validate([
             'occasion' => 'required',
         ]);
-
-        $top = DigitalWardrobe::where('category', 'Tops')->inRandomOrder()->where('occasion', $request->ocassion)->where('style_preference', Auth::user()->style_preference)->take(3)->get();
-        $bottom = DigitalWardrobe::where('category', 'Bottoms')->inRandomOrder()->where('occasion', $request->ocassion)->where('style_preference', Auth::user()->style_preference)->take(3)->get();
+        $occasion = $request->occasion;
+        // dd($ocassion);
+        $top = DigitalWardrobe::where('category', 'Tops')->inRandomOrder()->where('occasion', $occasion)->where('style_preference', Auth::user()->style_preference)->take(3)->get();
+        $bottom = DigitalWardrobe::where('category', 'Bottoms')->inRandomOrder()->where('occasion', $occasion)->where('style_preference', Auth::user()->style_preference)->take(3)->get();
         if ($top->isEmpty()) {
-            $top = DigitalWardrobe::where('category', 'Tops')->inRandomOrder()->where('occasion', $request->ocassion)->take(3)->get();
+            $top = DigitalWardrobe::where('category', 'Tops')->inRandomOrder()->where('occasion', $occasion)->take(3)->get();
             if ($top->isEmpty()) {
                 $top = DigitalWardrobe::where('category', 'Tops')->inRandomOrder()->take(3)->get();
             }
         }
 
         if ($bottom->isEmpty()) {
-            $bottom = DigitalWardrobe::where('category', 'Bottoms')->inRandomOrder()->where('occasion', $request->ocassion)->take(3)->get();
+            $bottom = DigitalWardrobe::where('category', 'Bottoms')->inRandomOrder()->where('occasion', $occasion)->take(3)->get();
             if ($bottom->isEmpty()) {
                 $bottom = DigitalWardrobe::where('category', 'Bottoms')->inRandomOrder()->take(3)->get();
             }
@@ -50,11 +51,8 @@ class MixMatchController extends Controller
         $top = DigitalWardrobe::where('category', 'Tops')->take(3)->get();
         $bottom = DigitalWardrobe::where('category', 'Bottoms')->take(3)->get();
 
-        // $combinedData = array_merge($top->toArray(), $bottom->toArray());
-        // return response()->json([
-        //     'data' => $combinedData
-        // ]);
-        return view('dashboard.dashboard-auto-mix-match', compact('top', 'bottom'));
+
+        return view('dashboard.dashboard-auto-mix-match', compact('top', 'bottom', 'occasion'));
         // return view('dashboard.dashboard-auto-mix-match', compact('top', 'bottom'));
     }
     public function store(Request $request)
@@ -63,12 +61,13 @@ class MixMatchController extends Controller
             $request->validate([
                 'topImageUrl' => 'required',
                 'bottomImageUrl' => 'required',
-                'tags' => 'required'
+                // 'tags' => 'required'
+                'occasion' => 'required'
             ]);
 
             $outfitHistory = OutfitHistory::create([
                 'user_id' => Auth::id(),
-                'outfit_tags' => $request->tags,
+                'occasion' => $request->occasion,
             ]);
 
             $baseUrl = url('/') . '/';
@@ -106,39 +105,3 @@ class MixMatchController extends Controller
         }
     }
 }
-// <script>
-//         document.addEventListener("DOMContentLoaded", function() {
-//             var saveButton = document.querySelector("#saveButton");
-//             if (saveButton) {
-//                 saveButton.addEventListener("click", function() {
-//                     var topCarouselActiveItem = document.querySelector(
-//                         "#topCarousel .carousel-item.active img");
-//                     var bottomCarouselActiveItem = document.querySelector(
-//                         "#bottomCarousel .carousel-item.active img");
-//                     var topImageUrl = topCarouselActiveItem.getAttribute("src");
-//                     var bottomImageUrl = bottomCarouselActiveItem.getAttribute("src");
-//                     var tagsTextarea = document.querySelector("#tags");
-//                     var tags = tagsTextarea.value;
-
-//                     // Kirim data ke backend menggunakan AJAX
-//                     $.ajax({
-//                         url: "/save-outfit",
-//                         method: "POST",
-//                         data: {
-//                             topImageUrl: topImageUrl,
-//                             bottomImageUrl: bottomImageUrl,
-//                             tags: tags
-//                         },
-//                         success: function(response) {
-//                             // Handle response dari backend jika diperlukan
-//                             console.log(response);
-//                         },
-//                         error: function(xhr, status, error) {
-//                             // Handle error jika terjadi
-//                             console.error(xhr.responseText);
-//                         }
-//                     });
-//                 });
-//             }
-//         });
-//     </script>

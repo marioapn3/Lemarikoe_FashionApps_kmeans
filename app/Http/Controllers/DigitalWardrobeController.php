@@ -21,6 +21,42 @@ class DigitalWardrobeController extends Controller
         $overalls = DigitalWardrobe::all();
         return view('dashboard.dashboard-wardrobe', compact('tops', 'bottoms', 'overalls'));
     }
+    public function filter(Request $request)
+    {
+
+        $topsQuery = DigitalWardrobe::where('category', 'Tops');
+
+        $bottomsQuery = DigitalWardrobe::where('category', 'Bottoms');
+
+        $overallsQuery = DigitalWardrobe::query();
+
+        if (!empty($request->color)) {
+            $topsQuery->where('color', $request->color);
+            $bottomsQuery->where('color', $request->color);
+            $overallsQuery->where('color', $request->color);
+        }
+
+        if (!empty($request->style)) {
+            $topsQuery->where('occasion', $request->style);
+            $bottomsQuery->where('occasion', $request->style);
+            $overallsQuery->where('occasion', $request->style);
+        }
+
+        if (!empty($request->fashion_style)) {
+            $topsQuery->where('fashionStyle', $request->fashion_style);
+            $bottomsQuery->where('fashionStyle', $request->fashion_style);
+            $overallsQuery->where('fashionStyle', $request->fashion_style);
+        }
+
+        $tops = $topsQuery->get();
+        $bottoms = $bottomsQuery->get();
+        $overalls = $overallsQuery->get();
+
+        return view(
+            'dashboard.dashboard-wardrobe',
+            compact('tops', 'bottoms', 'overalls')
+        );
+    }
     const STORAGE_PATHS = [
         'Tops' => 'public/uploads/tops',
         'Bottoms' => 'public/uploads/bottoms',

@@ -10,7 +10,7 @@ class OutfitHistory extends Model
     use HasFactory;
     protected $table = 'outfit_histories';
     protected $fillable = [
-        'user_id', 'outfit_tags'
+        'user_id', 'outfit_tags', 'occasion'
     ];
 
     public function user()

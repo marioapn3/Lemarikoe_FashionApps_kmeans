@@ -65,9 +65,9 @@
                             <div class="tab-pane fade show active" id="top-tab-pane" role="tabpanel"
                                 aria-labelledby="top-tab" tabindex="0">
                                 <div class="row row-cols-2 row-cols-lg-3">
-                                    @foreach ($tops as $top)
+                                    @foreach ($topsK as $t)
                                         <div class="col">
-                                            <img src="{{ asset($top->cloudFilePath) }}" class="d-block mx-auto"
+                                            <img src="{{ asset($t->cloudFilePath) }}" class="d-block mx-auto"
                                                 alt="">
                                         </div>
                                     @endforeach
@@ -76,9 +76,9 @@
                             <div class="tab-pane fade" id="bottom-tab-pane" role="tabpanel"
                                 aria-labelledby="profile-tab" tabindex="0">
                                 <div class="row row-cols-2 row-cols-lg-3">
-                                    @foreach ($bottoms as $bottom)
+                                    @foreach ($bottomsK as $b)
                                         <div class="col">
-                                            <img src="{{ asset($bottom->cloudFilePath) }}" class="d-block mx-auto"
+                                            <img src="{{ asset($b->cloudFilePath) }}" class="d-block mx-auto"
                                                 alt="">
                                         </div>
                                     @endforeach
@@ -103,8 +103,7 @@
                             <div id="topCarousel" class="carousel slide carousel-outfit carousel-dark mb-2">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img src="{{ asset('assets/images/outfit/top-none.png') }}"
-                                            class="d-block mx-auto" alt="...">
+                                        <img src="{{ asset($top) }}" class="d-block mx-auto" alt="...">
                                     </div>
 
                                     @foreach ($tops as $top)
@@ -128,8 +127,7 @@
                             <div id="bottomCarousel" class="carousel slide carousel-outfit carousel-dark mb-2">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img src="{{ asset('assets/images/outfit/bottom-none.png') }}"
-                                            class="d-block mx-auto" alt="...">
+                                        <img src="{{ asset($bot) }}" class="d-block mx-auto" alt="...">
                                     </div>
                                     @foreach ($bottoms as $bottom)
                                         <div class="carousel-item">
@@ -158,12 +156,18 @@
                                 {{-- occasion --}}
                                 <label for="tags">Select Occassion</label>
                                 <select name="occasion" id="occasion" class="form-select rounded">
-                                    <option value="">Choose Event</option>
-                                    <option value="Casual">Casual</option>
-                                    <option value="Formal">Formal</option>
-                                    <option value="Work">Work</option>
-                                    <option value="School">School</option>
+                                    <option value="" {{ $data->occasion == '' ? 'selected' : '' }}>Choose Event
+                                    </option>
+                                    <option value="Casual" {{ $data->occasion == 'Casual' ? 'selected' : '' }}>Casual
+                                    </option>
+                                    <option value="Formal" {{ $data->occasion == 'Formal' ? 'selected' : '' }}>Formal
+                                    </option>
+                                    <option value="Work" {{ $data->occasion == 'Work' ? 'selected' : '' }}>Work
+                                    </option>
+                                    <option value="School" {{ $data->occasion == 'School' ? 'selected' : '' }}>School
+                                    </option>
                                 </select>
+
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button onclick="saveData()" class="btn btn-primary px-4" type="button"
@@ -194,7 +198,9 @@
                 </div>
             </div>
         </div>
+
     </div>
+
     <script src="{{ asset('assets/vendors/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     {{-- script ajjax cdn --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -205,25 +211,33 @@
         }
         var selectedValue;
         var selectElement = document.getElementById('occasion');
+        var selectedValue = selectElement.value;
+
         selectElement.addEventListener('change', function() {
             selectedValue = this.value; // Memperbarui nilai variabel global saat perubahan terjadi
         });
 
 
+
         function saveData() {
             var topCarouselSrc = getActiveImageSrc('topCarousel');
             var bottomCarouselSrc = getActiveImageSrc('bottomCarousel');
-
+            var dataId = '{{ $data->id }}';
+            console.log(topCarouselSrc);
+            console.log(bottomCarouselSrc);
+            console.log(selectedValue);
+            console.log(dataId);
             $.ajax({
                 type: "POST",
-                url: "/dashboard/mix-match/store",
+                url: "/dashboard/outfit-history/update",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 data: {
                     topImageUrl: topCarouselSrc,
                     bottomImageUrl: bottomCarouselSrc,
-                    occasion: selectedValue
+                    occasion: selectedValue,
+                    id: dataId,
                 },
                 success: function(response) {
                     $(document).ready(function() {
@@ -232,6 +246,7 @@
                 },
                 error: function(xhr, status, error) {
                     // Tangani kesalahan jika terjadi
+                    console.log(xhr);
                 },
             });
         }

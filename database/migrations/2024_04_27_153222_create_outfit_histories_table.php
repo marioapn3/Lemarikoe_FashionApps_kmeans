@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('outfit_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('outfit_tags');
+            $table->string('occasion');
             // $table->string('cloudImageOutfit');
             $table->timestamps();
         });

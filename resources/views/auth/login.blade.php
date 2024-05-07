@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <x-toast-component />
     <div class="container-fluid">
         <div class="row align-items-center authentication">
             <div class="col-lg-6 bg-brown min-h-screen d-none d-lg-flex align-items-center justify-content-center">
@@ -43,7 +44,7 @@
                                 onclick="showHide()">
                                 <i class="bx bx-low-vision"></i></span>
                         </div>
-                        <a href="forgot-password.html" class="text-secondary fs-7">Forgot Password?</a>
+                        <a href="{{ route('forgot-password') }}" class="text-secondary fs-7">Forgot Password?</a>
                     </div>
                     <button class="btn btn-primary w-100 text-uppercase mb-2" type="submit">Login</button>
 
@@ -69,7 +70,7 @@
             </div>
         </div>
     </div>
-    @if (session('success'))
+    @if (session('successLogin'))
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var myModal = new bootstrap.Modal(document.getElementById('successModal'), {

@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <x-toast-component />
     <div class="container-fluid">
         <div class="row align-items-center authentication">
             <div class="col-lg-6 bg-brown min-h-screen d-none d-lg-flex align-items-center justify-content-center">

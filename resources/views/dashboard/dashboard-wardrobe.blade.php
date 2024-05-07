@@ -14,7 +14,7 @@
 
 <body class="overflow-x-hidden">
     <x-navbar-dashboard />
-
+    <x-toast-component />
     <div class="row">
         <x-sidebar-dashboard />
         <div class="col-lg-11 p-4 p-lg-5">
@@ -23,17 +23,66 @@
                     <h1 class="title text-brown fw-bolder mb-0">Digital Wardrobe</h1>
                 </div>
                 <div class="col-lg-7">
-                    <div class="d-flex align-items-center justify-content-end gap-2">
-                        <div class="d-flex gap-2">
-                            <div class="input-group">
-                                <span class="input-group-text border-dark bg-transparent" id="filter"><i
-                                        class="bx bx-filter"></i></span>
-                                <input type="text" class="form-control border-start-0 border-dark rounded-end-2"
-                                    placeholder="Filter">
+                    <form action="{{ route('dashboard.digital-wardrobe.filter') }}" method="GET">
+                        <div class="d-flex align-items-center justify-content-end gap-2">
+                            <div class="d-flex gap-2">
+                                <div class="input-group gap-2">
+                                    <select name="fashion_style" class="form-select rounded">
+                                        {{-- mendapatkan data dari get url --}}
+                                        <option value="" {{ !request()->has('fashion_style') ? 'selected' : '' }}>
+                                            Filter Fashion Style</option>
+                                        <option value="Vintage"
+                                            {{ request('fashion_style') == 'Vintage' ? 'selected' : '' }}>Vintage
+                                        </option>
+                                        <option value="Classic"
+                                            {{ request('fashion_style') == 'Classic' ? 'selected' : '' }}>Classic
+                                        </option>
+                                        <option value="Streetwear"
+                                            {{ request('fashion_style') == 'Streetwear' ? 'selected' : '' }}>Streetwear
+                                        </option>
+                                        <option value="Minimalistic"
+                                            {{ request('fashion_style') == 'Minimalistic' ? 'selected' : '' }}>
+                                            Minimalistic</option>
+                                        <option value="Indie"
+                                            {{ request('fashion_style') == 'Indie' ? 'selected' : '' }}>Indie</option>
+                                    </select>
+                                    <select name="style" class="form-select rounded">
+                                        <option value="" {{ !request()->has('style') ? 'selected' : '' }}>Filter
+                                            Fashion Style</option>
+                                        <option value="Casual" {{ request('style') == 'Casual' ? 'selected' : '' }}>
+                                            Casual</option>
+                                        <option value="Formal" {{ request('style') == 'Formal' ? 'selected' : '' }}>
+                                            Formal</option>
+                                        <option value="Work" {{ request('style') == 'Work' ? 'selected' : '' }}>Work
+                                        </option>
+                                        <option value="School" {{ request('style') == 'School' ? 'selected' : '' }}>
+                                            School</option>
+                                    </select>
+
+
+                                    <select name="color" class="form-select rounded">
+                                        <option value="" {{ !request()->has('color') ? 'selected' : '' }}>Filter
+                                            Fashion Style</option>
+                                        <option value="Dark" {{ request('color') == 'Dark' ? 'selected' : '' }}>Dark
+                                        </option>
+                                        <option value="Colourful"
+                                            {{ request('color') == 'Colourful' ? 'selected' : '' }}>Colourful</option>
+                                        <option value="Pastels" {{ request('color') == 'Pastels' ? 'selected' : '' }}>
+                                            Pastels</option>
+                                        <option value="Bright" {{ request('color') == 'Bright' ? 'selected' : '' }}>
+                                            Bright</option>
+                                        <option value="Monochrome"
+                                            {{ request('color') == 'Monochrome' ? 'selected' : '' }}>Monochrome
+                                        </option>
+
+                                    </select>
+                                </div>
+                                <button class="btn btn-brown rounded-1" type="submit"><i
+                                        class='bx bx-slider'></i></button>
                             </div>
-                            <button class="btn btn-brown rounded-1" type="submit"><i class='bx bx-slider'></i></button>
                         </div>
-                    </div>
+                    </form>
+
                 </div>
             </div>
 
@@ -48,43 +97,15 @@
                 <div class="swiper topSwiper">
                     <div class="swiper-wrapper">
                         @foreach ($tops as $top)
-                            <a href="#" data-id="{{ $top->id }}" href="javascript:void(0)" id="btn-edit-post"
+                            <a href="#" data-id="{{ $top->id }}" href="javascript:void(0)"
+                                id="btn-edit-post"
                                 class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
                                 <div class="card-body">
                                     <img src="{{ asset($top->cloudFilePath) }}" class="d-block mx-auto" alt="Outfit 1">
                                 </div>
                             </a>
                         @endforeach
-                        {{-- <a href="#"
-                            class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
-                            <div class="card-body">
-                                <img src="assets/images/outfit/tops-1.png" class="d-block mx-auto" alt="Outfit 1">
-                            </div>
-                        </a>
-                        <a href="#"
-                            class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
-                            <div class="card-body">
-                                <img src="assets/images/outfit/tops-2.png" class="d-block mx-auto" alt="Outfit 1">
-                            </div>
-                        </a>
-                        <a href="#"
-                            class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
-                            <div class="card-body">
-                                <img src="assets/images/outfit/tops-3.png" class="d-block mx-auto" alt="Outfit 1">
-                            </div>
-                        </a>
-                        <a href="#"
-                            class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
-                            <div class="card-body">
-                                <img src="assets/images/outfit/tops-4.png" class="d-block mx-auto" alt="Outfit 1">
-                            </div>
-                        </a>
-                        <a href="#"
-                            class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
-                            <div class="card-body">
-                                <img src="assets/images/outfit/tops-5.png" class="d-block mx-auto" alt="Outfit 1">
-                            </div>
-                        </a> --}}
+
                     </div>
                 </div>
 
@@ -103,7 +124,8 @@
                 <div class="swiper bottomSwiper">
                     <div class="swiper-wrapper">
                         @foreach ($bottoms as $bottom)
-                            <a href="#" data-id="{{ $bottom->id }}" href="javascript:void(0)" id="btn-edit-post"
+                            <a href="#" data-id="{{ $bottom->id }}" href="javascript:void(0)"
+                                id="btn-edit-post"
                                 class="swiper-slide card card-outfit d-flex align-items-center justify-content-center">
                                 <div class="card-body">
                                     <img src="{{ asset($bottom->cloudFilePath) }}" class="d-block mx-auto"
@@ -155,8 +177,8 @@
     </div>
 
     <button class="btn btn-success rounded-circle position-fixed"
-        style="width: 60px; height: 60px; bottom: 20px; right: 20px; z-index: 999" type="button" data-bs-toggle="modal"
-        data-bs-target="#addOutfit">
+        style="width: 60px; height: 60px; bottom: 20px; right: 20px; z-index: 999" type="button"
+        data-bs-toggle="modal" data-bs-target="#addOutfit">
         <i class="bx bx-plus fs-2"></i>
     </button>
     {{-- ADD MODAL --}}
