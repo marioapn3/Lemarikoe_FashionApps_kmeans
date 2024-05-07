@@ -28,7 +28,7 @@
 
                 <form action="{{ route('validasi-forgot-password-post') }}" method="post">
                     @csrf
-                    <input type="text" name="token" value="{{ $token }}">
+                    <input type="text" name="token" value="{{ $token }}" hidden>
                     <div class="input-group mb-3">
                         <input type="password" name="password" id="password" placeholder="Insert new password"
                             class="form-control rounded-end-0 py-2 ps-3 border-end-0">

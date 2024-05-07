@@ -159,23 +159,28 @@
                             <img id="tops" src="" alt="" class="rounded d-block mx-auto">
                             <img id="bots" src="" alt="" class="rounded d-block mx-auto">
                         </div>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7 ">
                             <p id="date"></p>
+
                             <span id="tags" class="border border-secondary-subtle rounded p-2">#Formal</span>
-                            <form action="{{ route('dashboard.outfit-history.delete-data') }}" class="mt-4"
-                                method="post">
-                                @csrf
-                                @method('POST')
-                                <!-- delete button -->
-                                <input name="id" id="id" type="text" hidden>
-                                <button class="btn btn-danger" type="submit">Delete</button>
-                            </form>
-                            <form action="{{ route('dashboard.outfit-history.edit-data') }}" class="mt-4"
-                                method="get">
-                                <!-- delete button -->
-                                <input name="id" id="id_edit" type="text" hidden>
-                                <button class="btn btn-danger" type="submit">Edit</button>
-                            </form>
+                            <div class="d-flex gap-2">
+                                <form action="{{ route('dashboard.outfit-history.edit-data') }}" class="mt-4"
+                                    method="get">
+                                    <!-- delete button -->
+                                    <input name="id" id="id_edit" type="text" hidden>
+                                    <button class="btn btn-success" type="submit">Edit</button>
+                                </form>
+                                <form action="{{ route('dashboard.outfit-history.delete-data') }}" class="mt-4"
+                                    method="post">
+                                    @csrf
+                                    @method('POST')
+                                    <!-- delete button -->
+                                    <input name="id" id="id" type="text" hidden>
+                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                </form>
+                            </div>
+
+
 
                         </div>
                     </div>
